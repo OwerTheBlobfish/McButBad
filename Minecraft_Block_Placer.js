@@ -8,7 +8,7 @@
 let blockList = [], gridList = [[], [], [], [], [], [], [], [], [], [], []];
 let grid = document.body.appendChild(document.createElement("div"));
 grid.id = "Grid_Container";
-let w = 25, h = 11, blockSide = 68, blockCount = -1, i;
+let w = 25, h = 11, blockSide = 68, blockCount = blockList.length, i;
 
 // Styles
 let preCon1 = document.head.appendChild(document.createElement("link"));
@@ -61,9 +61,9 @@ for (column = 0; column < h; column++) {
 }
 
 // Blocks
-let Block = (type, x, y, bname, img) => {
+function Block(type, x, y, bname, img) {
     blockCount++;
-    blockList[blockCount] = this;
+    blockList[blockCount-1] = this;
     if (gridList[y][x].style.borderStyle == "none") {
         console.error("Error: Space Occupied!" + "(" + x + ", " + y + ")");
         delete this;
@@ -231,19 +231,32 @@ let Block = (type, x, y, bname, img) => {
             this.bname = "";
             this.img = "";
     } else {
-        console.error("Error: No type or img specified.");
+        console.error("Error: No type or Image specified.");
         delete this;
         blockList.pop(blockList.length);
         blockCount--;
         return;
     }
     this.bimg = gridList[y][x].appendChild(document.createElement("img"));
-    bimg.src = this.img;
-    bimg.style.width = blockSide;
-    bimg.style.height = blockSide;
-    bimg.style.paddingLeft += 1
-    if (this.type == "oak_log_horizontal") bimg.style.transform = "rotate(90deg)"
-    if (this.type == "chain" || this.type == "torch") bimg.style.paddingLeft += (blockSide/2 - 15);
+    this.bimg.src = this.img;
+    this.bimg.style.width = blockSide;
+    this.bimg.style.height = blockSide;
+    this.bimg.style.paddingLeft += 1
+    if (this.type == "oak_log_horizontal") this.bimg.style.transform = "rotate(90deg)"
+    if (this.type == "chain" || this.type == "torch") this.bimg.style.paddingLeft += (blockSide/2 - 15);
     gridList[y][x].style.borderStyle = "none";
 }   
+
+function deleteBlock(x, y) {
+    for (i = 0; i < blockList.length; i++) {
+        if (blockList[i].x == x && blockList[i].y == y) {
+            for (let del in blockList[i]) delete blockList[i][del];
+            blockList.pop(blockList[i]);
+            console.log("Successfully Deleted Block! (" + x + ", " + y + ")");
+            return;
+        } else continue;
+    }
+    console.log("Nothing to delete!");
+}
+
 console.log("Program Ready!");
