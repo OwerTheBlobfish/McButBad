@@ -1,8 +1,17 @@
-// Type " new Block()" with the type of block as the first parameter, #
-// and the x and y coordinates as the second and third.               #
-// You can make your own block by putting null as the first parameter #
-// and specifying the name of your block and the image.               #
-//#####################################################################
+//#######################################################################
+// Type "new Block()" with the type of block as the first parameter,    #
+// and the x and y coordinates as the second and third.                 #
+// You can make your own block by putting null as the first parameter   #
+// and specifying the name of your block and the image.                 #
+//                                                                      #
+// Use "deleteBlock()" with coordinates as the parameters               #
+// to delete a block at those coordinates.                              #
+//                                                                      #
+//                                                                      #
+// All images from the Minecraft wiki:                                  #
+// https://minecraft.fandom.com/wiki/Minecraft_Wiki                     #
+//                                                                      #
+//#######################################################################
 
 // Vars
 let blockList = [], gridList = [[], [], [], [], [], [], [], [], [], [], []];
@@ -250,8 +259,11 @@ function Block(type, x, y, bname, img) {
 function deleteBlock(x, y) {
     for (i = 0; i < blockList.length; i++) {
         if (blockList[i].x == x && blockList[i].y == y) {
+            blockList[i].bimg.remove();
+            gridList[y][x].style.borderStyle = "solid";
             for (let del in blockList[i]) delete blockList[i][del];
             blockList.pop(blockList[i]);
+            blockCount--;
             console.log("Successfully Deleted Block! (" + x + ", " + y + ")");
             return;
         } else continue;
@@ -259,4 +271,15 @@ function deleteBlock(x, y) {
     console.log("Nothing to delete!");
 }
 
+function fill(blockType, x, y, z, w) {
+    for (i = 0; i < (w - y) + 1; i++) {
+        for (c = 0; c < (z - x) + 1; c++) new Block(blockType, c + x, i + y);
+    }
+}
+
+function clear(x, y, z, w) {
+    for (i = 0; i < (w - y) + 1; i++) {
+        for (c = 0; c < (z - x) + 1; c++) deleteBlock(c + x, i + y);
+    }
+}
 console.log("Program Ready!");
