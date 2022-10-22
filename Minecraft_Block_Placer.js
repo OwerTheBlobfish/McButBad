@@ -1,8 +1,17 @@
-// Type " new Block()" with the type of block as the first parameter, #
-// and the x and y coordinates as the second and third.               #
-// You can make your own block by putting null as the first parameter #
-// and specifying the name of your block and the image.               #
-//#####################################################################
+//#######################################################################
+// Type "new Block()" with the type of block as the first parameter,    #
+// and the x and y coordinates as the second and third.                 #
+// You can make your own block by putting null as the first parameter   #
+// and specifying the name of your block and the image.                 #
+//                                                                      #
+// Use "deleteBlock()" with coordinates as the parameters               #
+// to delete a block at those coordinates.                              #
+//                                                                      #
+//                                                                      #
+// All images from the Minecraft wiki:                                  #
+// https://minecraft.fandom.com/wiki/Minecraft_Wiki                     #
+//                                                                      #
+//#######################################################################
 
 // Vars
 let blockList = [], gridList = [[], [], [], [], [], [], [], [], [], [], []];
@@ -250,13 +259,18 @@ function Block(type, x, y, bname, img) {
 function deleteBlock(x, y) {
     for (i = 0; i < blockList.length; i++) {
         if (blockList[i].x == x && blockList[i].y == y) {
+            blockList[i].bimg.remove();
+            gridList[y][x].style.borderStyle = "solid";
             for (let del in blockList[i]) delete blockList[i][del];
             blockList.pop(blockList[i]);
+            blockCount--;
             console.log("Successfully Deleted Block! (" + x + ", " + y + ")");
             return;
         } else continue;
     }
     console.log("Nothing to delete!");
 }
+
+
 
 console.log("Program Ready!");
