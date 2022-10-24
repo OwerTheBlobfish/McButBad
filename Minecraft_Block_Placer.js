@@ -73,7 +73,7 @@ for (column = 0; column < h; column++) {
 function Block(type, x, y, bname, img) {
     blockCount++;
     blockList[blockCount-1] = this;
-    if (gridList[y][x].style.borderStyle == "none") {
+    if (gridList[y][x].style.borderStyle === "none") {
         console.error("Error: Space Occupied!" + "(" + x + ", " + y + ")");
         delete this;
         blockList.pop(blockList.length);
@@ -268,7 +268,7 @@ function deleteBlock(x, y) {
             return;
         } else continue;
     }
-    console.log("Nothing to delete!");
+    console.log("Nothing to delete! (" + x + ", " + y + ")");
 }
 
 function fill(blockType, x, y, z, w) {
