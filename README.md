@@ -1,5 +1,4 @@
 # McButBad
-Minecraft Block Placer
  * Welcome to a small side project, designed to be a fun small project 
  * that you can mess around with.
  * 
