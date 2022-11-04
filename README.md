@@ -1,5 +1,6 @@
 # McButBad
- * Welcome to a small side project, designed to be a fun small project 
+ *     UNFINISHED
+ * Welcome to a small side project,
  * that you can mess around with.
  * 
  * It is coded in 100% Javascript and could probably be way more efficient. (Made by a 12 year-old)
