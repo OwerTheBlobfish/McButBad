@@ -122,8 +122,8 @@ sideBar.style.right += 20;
 sideBar.style.bottom += 20;
 sideBar.style.backgroundColor = "red";
 
+let palateList = ["stone", "oak_plank", "cobblestone", "chest", "crafting_table"];
 for (let i = 0; i < 5; i++) {
-    let palateList = ["stone", "oak_plank", "cobblestone", "chest", "crafting_table"];
 	blockPalate[i] = {
         palateSquare : sideBar.appendChild(document.createElement("img")),
         blockType : palateList[i],
