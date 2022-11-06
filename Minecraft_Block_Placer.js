@@ -16,10 +16,50 @@
 
 // Vars
 let blockList = [];
+
+const usableBlocks = {
+    "dirt":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3d/Dirt_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200919012354",
+    "grass":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3b/Grass_Block_%28side_texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200921204925",
+    "glass":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1d/Glass_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20200920213104",
+    "stone_bricks":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/be/Stone_Bricks_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001141809",
+    "sand":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c8/Sand_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140257",
+    "ice":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e8/Ice_%28texture%29_JE2_BE6.png/revision/latest/scale-to-width-down/48?cb=20200922000647",
+    "stone":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Stone_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001141805",
+    "cobblestone":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a7/Cobblestone_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001121005",
+    "netherrack":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/98/Netherrack_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140136",
+    "end_stone":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/76/End_Stone_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001134049",
+    "glowstone":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c7/Glowstone_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001134117",
+    "diamond_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b4/Block_of_Diamond_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120845",
+    "iron_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5b/Block_of_Iron_%28texture%29_JE3_BE3.png/revision/latest/scale-to-width-down/48?cb=20201006053737",
+    "gold_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Block_of_Gold_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120858",
+    "redstone_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8a/Block_of_Redstone_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004101113",
+    "netherite_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3f/Block_of_Netherite_%28texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20201001120902",
+    "emerald_block":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/41/Block_of_Emerald_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120854",
+    "oak_plank":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e6/Oak_Planks_%28texture%29_JE6_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140156",
+    "oak_log_top":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Oak_Log_%28top_texture%29_JE5_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140152",
+    "oak_log_vertical":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5f/Oak_Log_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140144",
+    "oak_log_horizontal":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5f/Oak_Log_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140144",
+    "hay_bale":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/9f/Hay_Bale_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004111932",
+    "torch":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c9/Torch_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20191129162608",
+    "chain":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1b/Chain_%28texture%29_JE1.png/revision/latest/scale-to-width-down/48?cb=20200922190129",
+    "iron_bar":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8d/Iron_Bars_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000650",
+    "chest":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/08/Chest_%28front_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195049",
+    "furnace_on":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/28/On_Furnace_%28front_texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20210206133246",
+    "furnace_off":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/9a/Off_Furnace_%28front_texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20210206133200",
+    "crafting_table":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Crafting_Table_%28front_texture%29_JE4.png/revision/latest/scale-to-width-down/48?cb=20201001121026",
+    "oak_door_top":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/0f/Oak_Door_%28top_texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000809",
+    "oak_door_bottom":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f5/Oak_Door_%28bottom_texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140140",
+    "oak_trapdoor":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Oak_Trapdoor_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000818",
+    "tnt":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5d/TNT_%28side_texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004103532",
+    "bedrock":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/08/Bedrock_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001115713",
+    "large_chest_left":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Large_Chest_%28front_left_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195049",
+    "large_chest_right":"https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/ff/Large_Chest_%28front_right_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195051",
+}
+
 const grid = document.body.appendChild(document.createElement("div"));
 let currentBlockType = "stone";
 grid.id = "Grid_Container";
-let w = 35, h = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, logBlockData = true,
+let w = 34, h = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, logBlockData = true,
 canSwitch = true;
 
 // Styles
@@ -37,8 +77,7 @@ const font = document.head.appendChild(document.createElement("link"));
 font.href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap";
 font.rel = "stylesheet";
 const styles = document.head.appendChild(document.createElement("style"));
-styles.innerHTML = "#Grid_Container {font-family: 'Press Start 2P', cursive; font-size: 15px";
-
+styles.innerHTML = "#Grid_Container, #full_palate {font-family: 'Press Start 2P', cursive; font-size: 15px};";
 // Grid
 let cellContainer = [];        
 for (column = 0; column < h; column++) {
@@ -111,6 +150,7 @@ for (column = 0; column < h; column++) {
 
 // Sidebar 
 const sideBar = document.body.appendChild(document.createElement("div"));
+sideBar.id = "sidebar";
 let blockPalate = [];
 sideBar.style.position = "relative";
 sideBar.style.width = 150;
@@ -122,10 +162,57 @@ sideBar.style.right += 20;
 sideBar.style.bottom += 20;
 sideBar.style.backgroundColor = "red";
 
+
+let fullPalate = sideBar.appendChild(document.createElement('p'));
+fullPalate.innerHTML = "Full\nPalate";
+fullPalate.id = "full_palate";
+fullPalate.style.position = "absolute";
+fullPalate.style.textDecorationLine = "underline"
+fullPalate.style.left = 25;
+fullPalate.style.top = 130;
+fullPalate.style.fontSize = "20";
+fullPalate.addEventListener("click", e => {
+    if (e.button === 0) {
+        fullPalateScreen.style.display = "";
+    }
+});
+let fullPalateScreen = sideBar.appendChild(document.createElement("div"));
+fullPalateScreen.style.display = "none";
+fullPalateScreen.style.position = "relative";
+fullPalateScreen.style.borderStyle = "solid";
+fullPalateScreen.style.borderWidth = 5;
+fullPalateScreen.style.borderColor = "black";
+fullPalateScreen.style.left = 180;
+fullPalateScreen.style.top = 150;
+fullPalateScreen.style.width = 360;
+fullPalateScreen.style.height = 360;
+fullPalateScreen.style.backgroundColor = "white";
+
+let xPos = 0;
+let yPos = 0;
+for (let i in usableBlocks) {
+    xPos += 1;
+    let x = fullPalateScreen.appendChild(document.createElement("img"));
+    if (xPos === 6) {
+        xPos = 0;
+        yPos += 1;
+    }
+    if (yPos === 0) x.style.left = 60 * xPos - 60;
+    else x.style.left = 60 * xPos;
+    x.style.top = 60 * yPos;
+    x.src = usableBlocks[i];
+    x.style.position = "absolute";
+    x.style.width = 60;
+    x.style.height = 60;
+    if (i === "oak_log_horizontal") x.style.transform = "rotate(90deg)";
+}
+
+let palateContainer = sideBar.appendChild(document.createElement('div'));
+palateContainer.id = "Palate_Container";
 let palateList = ["stone", "oak_plank", "cobblestone", "chest", "crafting_table"];
 for (let i = 0; i < 5; i++) {
 	blockPalate[i] = {
-        palateSquare : sideBar.appendChild(document.createElement("img")),
+        palateSquare : palateContainer.appendChild(document.createElement("img")),
         blockType : palateList[i],
     } 
     /* Block Types */ {
@@ -166,7 +253,7 @@ for (let i = 0; i < 5; i++) {
         else if (palateList[i] === "large_chest_left") blockPalate[i].palateImage = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Large_Chest_%28front_left_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195049";
         else if (palateList[i] === "large_chest_right") blockPalate[i].palateImage = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/ff/Large_Chest_%28front_right_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195051";
     }
-    blockPalate[i].palateSquare.style.position = "relative";
+    blockPalate[i].palateSquare.style.position = "absolute";
     blockPalate[i].palateSquare.style.width = 80;
     blockPalate[i].palateSquare.style.height = 80;
     blockPalate[i].palateSquare.style.borderStyle = "solid";
@@ -174,7 +261,7 @@ for (let i = 0; i < 5; i++) {
     blockPalate[i].palateSquare.style.borderColor = "black";
     blockPalate[i].palateSquare.style.borderWidth = 2;
     blockPalate[i].palateSquare.style.left += 40;
-    blockPalate[i].palateSquare.style.top += 210 + i * 75;
+    blockPalate[i].palateSquare.style.top += 210 + i * 100;
     blockPalate[i].palateSquare.style.zIndex = 2;
     blockPalate[i].palateSquare.src = blockPalate[i].palateImage;
     blockPalate[i].palateSquare.id = blockPalate[i].blockType;
@@ -182,11 +269,12 @@ for (let i = 0; i < 5; i++) {
     blockPalate[i].palateSquare.addEventListener("mousedown", function (e) {
         if (e.button === 0) {
             currentBlockType = this.id;
+            for (let i of blockPalate) {
+                i.palateSquare.style.transform = "scale(1, 1)";
+            }
             this.style.transform = "scale(0.8, 0.8)";
+
         }
-    });
-    blockPalate[i].palateSquare.addEventListener("mouseup", function (e) {
-        if (e.button === 0) this.style.transform = "scale(1, 1)";
     });
 }
 
