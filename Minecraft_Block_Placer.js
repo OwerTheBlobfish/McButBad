@@ -34,7 +34,7 @@ let lastBlockPlaced = "stone";
 const grid = document.body.appendChild(document.createElement("div"));
 let currentBlockType = "stone";
 grid.id = "Grid_Container";
-let gridWidth = 34, gridHeight = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, logBlockData = true,
+let gridWidth = 34, gridHeight = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, shouldLogBlockData = true,
 canSwitch = true;
 
 // Styles
@@ -417,7 +417,7 @@ class Block {
             this.img = "";
         } 
         } 
-        if (logBlockData) console.log("Block Successfully Placed (" , x , "," , y , ")");
+        if (shouldLogBlockData) console.log("Block Successfully Placed (" , x , "," , y , ")");
         this.bimg = cellContainer[y][x].gridBlock.appendChild(document.createElement("img"));
         this.bimg.src = this.img;
         this.bimg.style.width = blockSide;
@@ -444,7 +444,7 @@ function deleteBlock(x, y) {
             cellContainer[y][x].gridBlock.style.borderStyle = "solid";
             for (let del in blockList[i]) delete blockList[i][del];
             blockCount--;
-            if (logBlockData) console.log("Successfully Deleted Block! (", x , "," , y , ")");
+            if (shouldLogBlockData) console.log("Successfully Deleted Block! (", x , "," , y , ")");
             index = blockList.indexOf(i);
             if (index > -1) { 
                 blockList.splice(index, 1);
@@ -457,14 +457,14 @@ function deleteBlock(x, y) {
 // Fill Function (Fills a Rectangle)
 function fill(blockType, x, y, z, gridWidth) {
     let counter = 0;
-    logBlockData = false;
+    shouldLogBlockData = false;
     for (let i = 0; i < (gridWidth - y) + 1; i++) {
         for (let c = 0; c < (z - x) + 1; c++) {
             counter++;
             new Block(blockType, c + x, i + y);
         }
     }
-    logBlockData = true;
+    shouldLogBlockData = true;
     
     console.log("Filled" , counter , () => {
         if (counter === 1) return "Block";
@@ -474,14 +474,14 @@ function fill(blockType, x, y, z, gridWidth) {
 // Clear Function (Clears a Rectangle)
 function clear(x, y, z, gridWidth) {
     let counter = 0;
-    logBlockData = false;
+    shouldLogBlockData = false;
     for (let i = 0; i < (gridWidth - y) + 1; i++) {
         for (let c = 0; c < (z - x) + 1; c++) {
             counter++;
             deleteBlock(c + x, i + y);
         }
     }
-    logBlockData = true;
+    shouldLogBlockData = true;
 
     console.log("Deleted" , counter , () => {
         if (counter === 1) return "Block";
