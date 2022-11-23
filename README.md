@@ -2,9 +2,9 @@
   Welcome to a small experiment on classes, designed to be a fun small project that you can mess around with.
   
   It is coded in 100% Javascript and could probably be way more efficient.
-  Just paste into a web Javascript console and wait for it to load.
+  Just paste into a web Javascript console and wait for it to load
   OR
-  Open the index.html file.
+  open the index.html file.
   
   This is free to use, have fun!
   
