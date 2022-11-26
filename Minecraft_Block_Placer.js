@@ -19,12 +19,11 @@
  * Create Local Storage
  * Finish palateSquare
  * Learn jQuery maybe
- * 
- * Hard code the oak door so on click both tiles it will change the type to same thing maby
+ * Add mouse controls for fill and clear or whatever
+ * Add a system to make encoded / decode text to builds
  */
 
 // Vars
-
 
 document.title = "MC Block Placer";
 let blockList = [];
@@ -32,7 +31,7 @@ let menuOpen = false;
 let lastBlockPlaced = "stone";
 
 const grid = document.body.appendChild(document.createElement("div"));
-let currentBlockType = "stone";
+let currentBlockType = "large_chest_left";
 grid.id = "Grid_Container";
 let gridWidth = 34, gridHeight = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, shouldLogBlockData = true,
 canSwitch = true;
@@ -93,13 +92,16 @@ for (column = 0; column < gridHeight; column++) {
         cellContainer[column][row].gridBlock.style.borderColor = "black";
         cellContainer[column][row].gridBlock.id = cellContainer[column][row].x + "_" + cellContainer[column][row].y;
 
-        cellContainer[column][row].gridBlock.addEventListener("click", function (e) {
-            if (e.button === 0 && buttonMode === 0) {
-                if (this.id.charAt(1) === "_") new Block(currentBlockType, this.id.charAt(0), this.id.charAt(2) + "" + this.id.charAt(3));
+        cellContainer[column][row].gridBlock.addEventListener("contextmenu", function(e) {
+            if (e.button === 2 && buttonMode === 0) {
+                if (this.id.charAt(1) === "_") console.log(new Block(currentBlockType, this.id.charAt(0), this.id.charAt(2) + "" + this.id.charAt(3)));
                 else if (this.id.charAt(2) === "_" && this.id.length === 4) new Block(currentBlockType, this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3));            
                 else new Block(currentBlockType, this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3) + "" + this.id.charAt(4));
             }
-            if (e.button === 0 && buttonMode === 1) {
+            e.preventDefault()
+        });
+        cellContainer[column][row].gridBlock.addEventListener("click", function (e) {
+            if (e.button === 0 && buttonMode === 0) {
                 if (this.id.charAt(1) === "_") deleteBlock(this.id.charAt(0), this.id.charAt(2) + "" + this.id.charAt(3));
                 else if (this.id.charAt(2) === "_" && this.id.length === 4) deleteBlock(this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3));            
                 else deleteBlock(this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3) + "" + this.id.charAt(4));
@@ -110,11 +112,11 @@ for (column = 0; column < gridHeight; column++) {
                 canSwitch = false;
                 if (buttonMode === 0) {
                     buttonMode = 1;
-                    console.log("Mode: Delete");
+                    console.log("Mode: Fill/Clear");
                 }
                 else if (buttonMode === 1) {
                     buttonMode = 0;
-                    console.log("Mode: Place");
+                    console.log("Mode: Place/Delete");
                 }
             }
         })
@@ -178,12 +180,16 @@ for (let i in usableBlocks) {
         xPos = 0;
         yPos += 1;
     }
+    x.addEventListener("contextmenu", function(e) {
+       if (e.button === 2) {
+        // Code for quick palate
+        } 
+        e.preventDefault();
+    });
+    
     x.addEventListener("click", e => {
         if (e.button === 0) currentBlockType = Object.keys(usableBlocks).find(key => usableBlocks[key] == usableBlocks[i]);
-        if (e.button === 2) {
-            // Code for quick palate
-
-        }
+        for (let i of blockPalate) i.palateSquare.style.transform = "scale(1, 1)";
     });
     x.style.left = 60 * xPos;
     x.style.top = 60 * yPos;
@@ -202,40 +208,7 @@ for (let i = 0; i < 5; i++) {
         palateSquare : palateContainer.appendChild(document.createElement("img")),
         blockType : palateList[i],
     } 
-    /* Block Types */ {
-        if (palateList[i] === "dirt") blockPalate[i].palateImage = "./Blocks/dirt.png";
-        else if (palateList[i] === "grass") blockPalate[i].palateImage = "./Blocks/grass.png";
-        else if (palateList[i] === "glass") blockPalate[i].palateImage = "./Blocks/glass.png";
-        else if (palateList[i] === "stone_bricks") blockPalate[i].palateImage = "./Blocks/stone_bricks.png";
-        else if (palateList[i] === "sand") blockPalate[i].palateImage = "./Blocks/sand.png";
-        else if (palateList[i] === "ice") blockPalate[i].palateImage = "./Blocks/ice.png";
-        else if (palateList[i] === "stone") blockPalate[i].palateImage = "./Blocks/stone.png";
-        else if (palateList[i] === "cobblestone") blockPalate[i].palateImage = "./Blocks/cobblestone.png";
-        else if (palateList[i] === "netherrack") blockPalate[i].palateImage = "./Blocks/netherrack.png";
-        else if (palateList[i] === "end_stone") blockPalate[i].palateImage = "./Blocks/end_stone.png";
-        else if (palateList[i] === "glowstone") blockPalate[i].palateImage = "./Blocks/glowstone.png";
-        else if (palateList[i] === "diamond_block") blockPalate[i].palateImage = "./Blocks/diamond_block.png";
-        else if (palateList[i] === "iron_block") blockPalate[i].palateImage = "./Blocks/iron_block.png";
-        else if (palateList[i] === "gold_block") blockPalate[i].palateImage = "./Blocks/gold_block.png";
-        else if (palateList[i] === "redstone_block") blockPalate[i].palateImage = "./Blocks/redstone_block.png";
-        else if (palateList[i] === "netherite_block") blockPalate[i].palateImage = "./Blocks/netherite_block.png";
-        else if (palateList[i] === "emerald_block") blockPalate[i].palateImage = "./Blocks/emerald_block.png";
-        else if (palateList[i] === "oak_plank") blockPalate[i].palateImage = "./Blocks/oak_plank.png";
-        else if (palateList[i] === "oak_log_top") blockPalate[i].palateImage = "./Blocks/oak_log_top.png";
-        else if (palateList[i] === "oak_log_vertical") blockPalate[i].palateImage = "./Blocks/oak_log.png";
-        else if (palateList[i] === "oak_log_horizontal") blockPalate[i].palateImage = ".Blocks/oak_log.png";
-        else if (palateList[i] === "hay_bale") blockPalate[i].palateImage = "./Blocks/hay_bale.png";
-        else if (palateList[i] === "torch") blockPalate[i].palateImage = "./Blocks/torch.png";
-        else if (palateList[i] === "bookshelf") blockPalate[i].palateImage = "./Blocks/bookshelf.png";
-        else if (palateList[i] === "iron_bar") blockPalate[i].palateImage = "./Blocks/iron_bar.png";
-        else if (palateList[i] === "chest") blockPalate[i].palateImage = "./Blocks/chest.png";
-        else if (palateList[i] === "obsidian") blockPalate[i].palateImage = "./Blocks/obsidian.png";
-        else if (palateList[i] === "furnace_off") blockPalate[i].palateImage = "./Blocks/furnace.png";
-        else if (palateList[i] === "crafting_table") blockPalate[i].palateImage = "./Blocks/crafting_table.png";
-        else if (palateList[i] === "oak_trapdoor") blockPalate[i].palateImage = "./Blocks/oak_trapdoor.png";
-        else if (palateList[i] === "tnt") blockPalate[i].palateImage = "./Blocks/tnt.png";
-        else if (palateList[i] === "bedrock") blockPalate[i].palateImage = "./Blocks/bedrock.png";
-    }
+    blockPalate[i].palateImage = "./Blocks/" + palateList[i] +".png";
     blockPalate[i].palateSquare.style.position = "absolute";
     blockPalate[i].palateSquare.style.width = 80;
     blockPalate[i].palateSquare.style.height = 80;
@@ -262,7 +235,7 @@ for (let i = 0; i < 5; i++) {
 
 // Blocks
 class Block {
-    constructor(type, x, y, bname, img) {
+    constructor(type, x, y) {
         blockCount++;
         blockList[blockCount-1] = this;
         if (cellContainer[y][x].isOccupied) {
@@ -272,21 +245,7 @@ class Block {
             blockCount--; 
             return;
         } 
-        if ((img === undefined || bname === undefined) && type === null) {
-            console.error("Error: No type or Image specified.");
-            delete this;
-            blockList.pop();
-            blockCount--;
-            return;
-        }    
-        if (x > gridWidth || y > gridHeight || x < 0 || y < 0) {
-            console.error("Error: Invalid X or Y coordinate.");
-            delete this;
-            blockList.pop();
-            blockCount--;
-            return;
-        }
-        if ((type === "large_chest_left" && cellContainer[y][+x+1].isOccupied && lastBlockPlaced != "large_chest_right") || (type === "oak_door_bottom" && cellContainer[+y+1][x].isOccupied && lastBlockPlaced != "oak_door_top") || (type === "oak_door_top" && cellContainer[y][+x-1].isOccupied && lastBlockPlaced != "oak_door_bottom") || (type === "large_chest_right" && cellContainer[y][+x-1].isOccupied && lastBlockPlaced != "large_chest_left")) {
+        if ((type === "large_chest_left" && cellContainer[y][+x+1].isOccupied && (lastBlockPlaced != "large_chest_right"))|| (type === "oak_door_bottom" && cellContainer[+y+1][x].isOccupied && lastBlockPlaced != "oak_door_top") || (type === "oak_door_top" && cellContainer[y][+x-1].isOccupied && lastBlockPlaced != "oak_door_bottom") || (type === "large_chest_right" && cellContainer[y][+x-1].isOccupied && lastBlockPlaced != "large_chest_left")) {
             console.error("Error: Not Enough Space.");
             delete this;
             blockList.pop();
@@ -297,129 +256,49 @@ class Block {
         this.x = x;
         this.y = y;
         /* Block Types */ {
-        if (type === "stone" || this.type === undefined) {
-            this.bname = "stone";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/dc/Stone_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001141805";
-        } else if (type === "dirt") {
-            this.bname = "dirt";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3d/Dirt_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200919012354"
-        } else if (type === "grass") {
-            this.bname = "grass";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3b/Grass_Block_%28side_texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200921204925"
-        } else if (type === "glass") {
-            this.bname = "glass";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1d/Glass_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20200920213104";
-        } else if (type === "dirt") {
-            this.bname = "dirt";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3d/Dirt_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200919012354";
-        } else if (type === "stone_bricks") {
-            this.bname = "stone_bricks";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/be/Stone_Bricks_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001141809";
-        } else if (type === "sand") {
-            this.bname = "sand";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c8/Sand_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140257";
-        } else if (type === "ice") {
-            this.bname = "ice";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e8/Ice_%28texture%29_JE2_BE6.png/revision/latest/scale-to-width-down/48?cb=20200922000647";
-        }  else if (type === "cobblestone") {
-            this.bname = "cobblestone";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a7/Cobblestone_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001121005";
-        } else if (type === "netherrack") {
-            this.bname = "netherrack";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/98/Netherrack_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140136";
-        } else if (type === "end_stone") {
-            this.bname = "end_stone";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/76/End_Stone_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001134049";
-        } else if (type === "glowstone") {
-            this.bname = "glowstone";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c7/Glowstone_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001134117";
-        } else if (type === "diamond_block") {
-            this.bname = "diamond_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b4/Block_of_Diamond_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120845";
-        } else if (type === "iron_block") {
-            this.bname = "iron_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5b/Block_of_Iron_%28texture%29_JE3_BE3.png/revision/latest/scale-to-width-down/48?cb=20201006053737";
-        } else if (type === "gold_block") {
-            this.bname = "gold_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/2d/Block_of_Gold_%28texture%29_JE5_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120858";
-        } else if (type === "redstone_block") {
-            this.bname = "redstone_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8a/Block_of_Redstone_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004101113";
-        } else if (type === "netherite_block") {
-            this.bname = "netherite_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3f/Block_of_Netherite_%28texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20201001120902";
-        } else if (type === "emerald_block") {
-            this.bname = "emerald_block";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/41/Block_of_Emerald_%28texture%29_JE4_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001120854";
-        } else if (type === "oak_plank") {
-            this.bname = "oak_plank";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e6/Oak_Planks_%28texture%29_JE6_BE3.png/revision/latest/scale-to-width-down/48?cb=20201001140156";
-        } else if (type === "oak_log_top") {
-            this.bname = "oak_log";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Oak_Log_%28top_texture%29_JE5_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140152";
-        } else if (type === "oak_log_vertical") {
-            this.bname = "oak_log";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5f/Oak_Log_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140144";
-        } else if (type === "oak_log_horizontal") {
-            this.bname = "oak";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5f/Oak_Log_%28texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140144";
-        } else if (type === "hay_bale") {
-            this.bname = "hay_bale";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/9f/Hay_Bale_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004111932";
-        } else if (type === "torch") {
-            this.bname = "torch";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c9/Torch_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20191129162608";
-        } else if (type === "bookshelf") {
-            this.bname = "bookshelf";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f3/Bookshelf_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201006054051";
-        } else if (type === "iron_bar") {
-            this.bname = "iron_bar";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/8d/Iron_Bars_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000650";
-        } else if (type === "chest") {
-            this.bname = "chest";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/08/Chest_%28front_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195049";
-        } else if (type === "smooth_stone") {
-            this.bname = "smooth_stone";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c8/Smooth_Stone_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20210209145037";
-        } else if (type === "obsidian") { 
-            this.bname = "obsidian";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5a/Obsidian_%28texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140204";
-        }
-        else if (type === "furnace_off") {
-            this.bname = "furnace";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/9a/Off_Furnace_%28front_texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20210206133200";
-        } else if (type === "crafting_table") {
-            this.bname = "crafting_table";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Crafting_Table_%28front_texture%29_JE4.png/revision/latest/scale-to-width-down/48?cb=20201001121026";
-        } else if (type === "oak_door_top") {
-            this.bname = "oak_door";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/0f/Oak_Door_%28top_texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000809";
-        } else if (type === "oak_door_bottom") {
-            this.bname = "oak_door";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/f5/Oak_Door_%28bottom_texture%29_JE4_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001140140";
-        } else if (type === "oak_trapdoor") {
-            this.bname = "oak_trapdoor";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Oak_Trapdoor_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20200922000818";
-        } else if (type === "tnt") {
-            this.bname = "tnt";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/5d/TNT_%28side_texture%29_JE3_BE2.png/revision/latest/scale-to-width-down/48?cb=20201004103532";
-        } else if (type === "bedrock") {
-            this.bname = "bedrock";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/08/Bedrock_%28texture%29_JE2_BE2.png/revision/latest/scale-to-width-down/48?cb=20201001115713";
-        } else if (type === "large_chest_left") {
-            this.bname = "large_chest";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7f/Large_Chest_%28front_left_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195049";
-        } else if (type === "large_chest_right") {
-            this.bname = "large_chest";
-            this.img = "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/ff/Large_Chest_%28front_right_texture%29_JE1_BE1.png/revision/latest/scale-to-width-down/48?cb=20200918195051";
-        } else if (type === "") {
-            this.bname = "";
-            this.img = "";
-        } 
+        if (type === "stone" || this.type === undefined) this.bname = "stone";
+        else if (type === "dirt") this.bname = "dirt";
+        else if (type === "grass") this.bname = "grass";
+        else if (type === "glass") this.bname = "glass";
+        else if (type === "dirt") this.bname = "dirt";
+        else if (type === "stone_bricks") this.bname = "stone_bricks";
+        else if (type === "sand") this.bname = "sand";
+        else if (type === "ice") this.bname = "ice";
+        else if (type === "cobblestone") this.bname = "cobblestone";
+        else if (type === "netherrack") this.bname = "netherrack";
+        else if (type === "end_stone") this.bname = "end_stone";
+        else if (type === "glowstone") this.bname = "glowstone";
+        else if (type === "diamond_block") this.bname = "diamond_block";
+        else if (type === "iron_block") this.bname = "iron_block";
+        else if (type === "gold_block") this.bname = "gold_block";
+        else if (type === "redstone_block") this.bname = "redstone_block";
+        else if (type === "netherite_block") this.bname = "netherite_block";
+        else if (type === "emerald_block") this.bname = "emerald_block";
+        else if (type === "oak_plank") this.bname = "oak_plank";
+        else if (type === "oak_log_top") this.bname = "oak_log";
+        else if (type === "oak_log_vertical") this.bname = "oak_log";
+        else if (type === "oak_log_horizontal") this.bname = "oak";
+        else if (type === "hay_bale") this.bname = "hay_bale";
+        else if (type === "torch") this.bname = "torch";
+        else if (type === "bookshelf") this.bname = "bookshelf";
+        else if (type === "iron_bar") this.bname = "iron_bar";
+        else if (type === "chest") this.bname = "chest";
+        else if (type === "smooth_stone") this.bname = "smooth_stone";
+        else if (type === "obsidian")  this.bname = "obsidian";
+        else if (type === "furnace_off") this.bname = "furnace";
+        else if (type === "crafting_table") this.bname = "crafting_table";
+        else if (type === "oak_door_top") this.bname = "oak_door";
+        else if (type === "oak_door_bottom") this.bname = "oak_door";
+        else if (type === "oak_trapdoor") this.bname = "oak_trapdoor";
+        else if (type === "tnt") this.bname = "tnt";
+        else if (type === "bedrock") this.bname = "bedrock";
+        else if (type === "large_chest_left") this.bname = "large_chest";
+        else if (type === "large_chest_right") this.bname = "large_chest";
+        else if (type === "") this.bname = "";
         } 
         if (shouldLogBlockData) console.log("Block Successfully Placed (" , x , "," , y , ")");
         this.bimg = cellContainer[y][x].gridBlock.appendChild(document.createElement("img"));
-        this.bimg.src = this.img;
+        this.bimg.src = './Blocks/' + this.type + ".png";
         this.bimg.style.width = blockSide;
         this.bimg.style.height = blockSide;
         this.bimg.style.position = "absolute";
@@ -435,24 +314,24 @@ class Block {
         return;
     }   
 }
+
+// Fix glitch where delete function doesn't delete blockList block.
 // Deletes a block
 function deleteBlock(x, y) {
     for (let i = 0; i < blockList.length; i++) {
         if (blockList[i].x === x && blockList[i].y === y) {
             cellContainer[y][x].isOccupied = false;
+            console.log(blockList[i]);
             blockList[i].bimg.remove();
             cellContainer[y][x].gridBlock.style.borderStyle = "solid";
             for (let del in blockList[i]) delete blockList[i][del];
             blockCount--;
             if (shouldLogBlockData) console.log("Successfully Deleted Block! (", x , "," , y , ")");
-            index = blockList.indexOf(i);
-            if (index > -1) { 
-                blockList.splice(index, 1);
-            }
             return;
         } else continue;
     }
     console.log("Nothing to delete! (", x , "," , y , ")");
+    return;
 }
 // Fill Function (Fills a Rectangle)
 function fill(blockType, x, y, z, gridWidth) {
@@ -488,5 +367,20 @@ function clear(x, y, z, gridWidth) {
         else return "Blocks";
     });
 }
-
+function exportBuild() {
+    function replacer(key, value) {
+        if (key == "img") return undefined;
+        else if (key == "bname") return undefined;
+        else if (key == "bimg") return undefined;
+        else return value;
+    }
+    console.log("Run this to import this build:\nimportBuild('" + JSON.stringify(blockList, replacer) + "');")
+    return;
+}
+function importBuild(build) {
+    let parsed = JSON.parse(build);
+    for(let i in parsed) {
+        new Block(parsed[i].type, +parsed[i].x, +parsed[i].y);
+    }
+}
 console.log("Program Ready!");

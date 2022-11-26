@@ -6,7 +6,7 @@
   OR
   Open the index.html file.
   
-  Left click to do actions, press q to switch between place and destroy.
+  Left click to break, right click to place, press q to switch between fill and clear (Unfinished).
   This is free to use, have fun!
   
   All images sourced from the Minecraft Wiki (https://minecraft.fandom.com/wiki/List_of_block_textures)
