@@ -29,10 +29,10 @@ document.title = "MC Block Placer";
 let blockList = [];
 let menuOpen = false;
 let lastBlockPlaced = "stone";
-
+let fillPointOne, fillPointTwo, clearPointOne, clearPointTwo = undefined;
 const grid = document.body.appendChild(document.createElement("div"));
-let currentBlockType = "large_chest_left";
-grid.id = "Grid_Container";
+let currentBlockType = "stone";
+grid.id = "gridContainer";
 let gridWidth = 34, gridHeight = 15, blockSide = 50, blockCount = blockList.length, buttonMode = 0, index, shouldLogBlockData = true,
 canSwitch = true;
 
@@ -51,7 +51,7 @@ const font = document.head.appendChild(document.createElement("link"));
 font.href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap";
 font.rel = "stylesheet";
 const styles = document.head.appendChild(document.createElement("style"));
-styles.innerHTML = "#Grid_Container, #full_palate {font-family: 'Press Start 2P', cursive; font-size: 15px};";
+styles.innerHTML = "#gridContainer, #full_palate {font-family: 'Press Start 2P', cursive; font-size: 15px};";
 // Grid
 let cellContainer = [];        
 for (column = 0; column < gridHeight; column++) {
@@ -90,21 +90,34 @@ for (column = 0; column < gridHeight; column++) {
         cellContainer[column][row].gridBlock.style.borderStyle = "solid";
         cellContainer[column][row].gridBlock.style.borderWidth = 1;
         cellContainer[column][row].gridBlock.style.borderColor = "black";
-        cellContainer[column][row].gridBlock.id = cellContainer[column][row].x + "_" + cellContainer[column][row].y;
-
+        cellContainer[column][row].gridBlock.id = cellContainer[column][row].x + " " + cellContainer[column][row].y;
+        grid.addEventListener("contextmenu", (e) => e.preventDefault()); 
         cellContainer[column][row].gridBlock.addEventListener("contextmenu", function(e) {
-            if (e.button === 2 && buttonMode === 0) {
-                if (this.id.charAt(1) === "_") console.log(new Block(currentBlockType, this.id.charAt(0), this.id.charAt(2) + "" + this.id.charAt(3)));
-                else if (this.id.charAt(2) === "_" && this.id.length === 4) new Block(currentBlockType, this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3));            
-                else new Block(currentBlockType, this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3) + "" + this.id.charAt(4));
+            if (e.button === 2 && buttonMode === 0) new Block(currentBlockType, this.id.split(" ")[0], this.id.split(" ")[1]);
+            if (e.button === 2 && buttonMode === 1) {
+                if (fillPointOne == undefined && fillPointTwo == undefined) {
+                    fillPointOne = [this.id.split(" ")[0], this.id.split(" ")[1]];
+                    console.log("Point 1: " + fillPointOne[0], fillPointOne[1]);
+                } else {
+                    fillPointTwo = [this.id.split(" ")[0], this.id.split(" ")[1]];
+                    console.log("Point 2: " + fillPointTwo[0], fillPointTwo[1]);
+                    fill(currentBlockType, fillPointOne[0], fillPointOne[1], fillPointTwo[0], fillPointTwo[1]);
+                    fillPointOne, fillPointTwo = undefined;
+                }
             }
-            e.preventDefault()
         });
         cellContainer[column][row].gridBlock.addEventListener("click", function (e) {
-            if (e.button === 0 && buttonMode === 0) {
-                if (this.id.charAt(1) === "_") deleteBlock(this.id.charAt(0), this.id.charAt(2) + "" + this.id.charAt(3));
-                else if (this.id.charAt(2) === "_" && this.id.length === 4) deleteBlock(this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3));            
-                else deleteBlock(this.id.charAt(0) + "" + this.id.charAt(1), this.id.charAt(3) + "" + this.id.charAt(4));
+            if (e.button === 0 && buttonMode === 0) deleteBlock(this.id.split(" ")[0], this.id.split(" ")[1]);
+            if (e.button === 0 && buttonMode === 1) {
+                if (clearPointOne == undefined && clearPointTwo == undefined) {
+                    clearPointOne = [this.id.split(" ")[0], this.id.split(" ")[1]];
+                    console.log("Point 1: " + clearPointOne[0], clearPointOne[1]);
+                } else {
+                    clearPointTwo = [this.id.split(" ")[0], this.id.split(" ")[1]];
+                    console.log("Point 2: " + clearPointTwo[0], clearPointTwo[1]);
+                    clear(currentBlockType, clearPointOne[0], clearPointOne[1], clearPointTwo[0], clearPointTwo[1]);
+                    clearPointOne, clearPointTwo = undefined;
+                }
             }
         });
         document.body.addEventListener("keydown", e => {
@@ -255,55 +268,16 @@ class Block {
         this.type = type;
         this.x = x;
         this.y = y;
-        /* Block Types */ {
         if (type === "stone" || this.type === undefined) this.bname = "stone";
-        else if (type === "dirt") this.bname = "dirt";
-        else if (type === "grass") this.bname = "grass";
-        else if (type === "glass") this.bname = "glass";
-        else if (type === "dirt") this.bname = "dirt";
-        else if (type === "stone_bricks") this.bname = "stone_bricks";
-        else if (type === "sand") this.bname = "sand";
-        else if (type === "ice") this.bname = "ice";
-        else if (type === "cobblestone") this.bname = "cobblestone";
-        else if (type === "netherrack") this.bname = "netherrack";
-        else if (type === "end_stone") this.bname = "end_stone";
-        else if (type === "glowstone") this.bname = "glowstone";
-        else if (type === "diamond_block") this.bname = "diamond_block";
-        else if (type === "iron_block") this.bname = "iron_block";
-        else if (type === "gold_block") this.bname = "gold_block";
-        else if (type === "redstone_block") this.bname = "redstone_block";
-        else if (type === "netherite_block") this.bname = "netherite_block";
-        else if (type === "emerald_block") this.bname = "emerald_block";
-        else if (type === "oak_plank") this.bname = "oak_plank";
-        else if (type === "oak_log_top") this.bname = "oak_log";
-        else if (type === "oak_log_vertical") this.bname = "oak_log";
-        else if (type === "oak_log_horizontal") this.bname = "oak";
-        else if (type === "hay_bale") this.bname = "hay_bale";
-        else if (type === "torch") this.bname = "torch";
-        else if (type === "bookshelf") this.bname = "bookshelf";
-        else if (type === "iron_bar") this.bname = "iron_bar";
-        else if (type === "chest") this.bname = "chest";
-        else if (type === "smooth_stone") this.bname = "smooth_stone";
-        else if (type === "obsidian")  this.bname = "obsidian";
-        else if (type === "furnace_off") this.bname = "furnace";
-        else if (type === "crafting_table") this.bname = "crafting_table";
-        else if (type === "oak_door_top") this.bname = "oak_door";
-        else if (type === "oak_door_bottom") this.bname = "oak_door";
-        else if (type === "oak_trapdoor") this.bname = "oak_trapdoor";
-        else if (type === "tnt") this.bname = "tnt";
-        else if (type === "bedrock") this.bname = "bedrock";
-        else if (type === "large_chest_left") this.bname = "large_chest";
-        else if (type === "large_chest_right") this.bname = "large_chest";
-        else if (type === "") this.bname = "";
-        } 
+        else this.bname = this.type;
         if (shouldLogBlockData) console.log("Block Successfully Placed (" , x , "," , y , ")");
-        this.bimg = cellContainer[y][x].gridBlock.appendChild(document.createElement("img"));
-        this.bimg.src = './Blocks/' + this.type + ".png";
-        this.bimg.style.width = blockSide;
-        this.bimg.style.height = blockSide;
-        this.bimg.style.position = "absolute";
+        this.cellImg = cellContainer[y][x].gridBlock.appendChild(document.createElement("img"));
+        this.cellImg.src = './Blocks/' + this.type + ".png";
+        this.cellImg.style.width = blockSide;
+        this.cellImg.style.height = blockSide;
+        this.cellImg.style.position = "absolute";
         cellContainer[y][x].isOccupied = true;
-        if (type === "oak_log_horizontal") this.bimg.style.transform = "rotate(90deg)";
+        if (type === "oak_log_horizontal") this.cellImg.style.transform = "rotate(90deg)";
         if (type === "large_chest_right" && !cellContainer[y][+x-1].isOccupied) new Block("large_chest_left", (+x-1).toString(), y);
         if (type === "oak_door_top" && !cellContainer[+y-1][x].isOccupied) new Block("oak_door_bottom", x, (+y+1).toString());
         if (type === "large_chest_left" && !cellContainer[y][+x+1].isOccupied) new Block("large_chest_right", (+x+1).toString(), y);
@@ -315,16 +289,16 @@ class Block {
     }   
 }
 
-// Fix glitch where delete function doesn't delete blockList block.
 // Deletes a block
 function deleteBlock(x, y) {
     for (let i = 0; i < blockList.length; i++) {
         if (blockList[i].x === x && blockList[i].y === y) {
             cellContainer[y][x].isOccupied = false;
             console.log(blockList[i]);
-            blockList[i].bimg.remove();
+            blockList[i].cellImg.remove();
             cellContainer[y][x].gridBlock.style.borderStyle = "solid";
             for (let del in blockList[i]) delete blockList[i][del];
+            blockList.splice(i, 1);
             blockCount--;
             if (shouldLogBlockData) console.log("Successfully Deleted Block! (", x , "," , y , ")");
             return;
@@ -334,53 +308,48 @@ function deleteBlock(x, y) {
     return;
 }
 // Fill Function (Fills a Rectangle)
-function fill(blockType, x, y, z, gridWidth) {
+function fill(blockType, x, y, z, w) {
     let counter = 0;
     shouldLogBlockData = false;
-    for (let i = 0; i < (gridWidth - y) + 1; i++) {
+    for (let i = 0; i < (w - y) + 1; i++) {
         for (let c = 0; c < (z - x) + 1; c++) {
             counter++;
             new Block(blockType, c + x, i + y);
         }
     }
     shouldLogBlockData = true;
-    
-    console.log("Filled" , counter , () => {
+    let countMsg = () => {
         if (counter === 1) return "Block";
         else return "Blocks";
-    });
+    }
+    console.log("Filled" , counter , countMsg());
 }
 // Clear Function (Clears a Rectangle)
-function clear(x, y, z, gridWidth) {
+function clear(x, y, z, w) {
     let counter = 0;
     shouldLogBlockData = false;
-    for (let i = 0; i < (gridWidth - y) + 1; i++) {
+    for (let i = 0; i < (w - y) + 1; i++) {
         for (let c = 0; c < (z - x) + 1; c++) {
             counter++;
             deleteBlock(c + x, i + y);
         }
     }
     shouldLogBlockData = true;
-
-    console.log("Deleted" , counter , () => {
+    let countMsg = () => {
         if (counter === 1) return "Block";
         else return "Blocks";
-    });
-}
-function exportBuild() {
-    function replacer(key, value) {
-        if (key == "img") return undefined;
-        else if (key == "bname") return undefined;
-        else if (key == "bimg") return undefined;
-        else return value;
     }
-    console.log("Run this to import this build:\nimportBuild('" + JSON.stringify(blockList, replacer) + "');")
-    return;
+    console.log("Deleted" , counter , countMsg());
 }
+
+const exportBuild = () => console.log("Run this to import this build:\nimportBuild('" + JSON.stringify(blockList) + "');")
+
 function importBuild(build) {
+    shouldLogBlockData = false;
     let parsed = JSON.parse(build);
-    for(let i in parsed) {
-        new Block(parsed[i].type, +parsed[i].x, +parsed[i].y);
-    }
+    for(let i in parsed) new Block(parsed[i].type, +parsed[i].x, +parsed[i].y);
+    shouldLogBlockData = true;
+    console.log("Successfully Imported.")
 }
+
 console.log("Program Ready!");

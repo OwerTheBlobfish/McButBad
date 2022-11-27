@@ -4,7 +4,7 @@
   It is coded in 100% Javascript and could probably be more efficient.
   Just clone the repo and open the index.html file.
   
-  Left click to break, right click to place, press q to switch between fill and clear (Unfinished).
+  Left click to break, right click to place, press q to switch between clear and clear (Unfinished).
   This is free to use, have fun!
   
   All images sourced from the Minecraft Wiki (https://minecraft.fandom.com/wiki/List_of_block_textures)
