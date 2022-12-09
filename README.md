@@ -1,7 +1,7 @@
 # Minecraft But Bad
   Welcome to a small experiment on classes, designed to be a fun small project that you can mess around with.
   
-  It is coded in 100% Javascript and could probably be more efficient.
+  It is coded in Javascript and could probably be more efficient.
   Just clone the repo and open the index.html file.
   
   Left click to break, right click to place, press q to switch between clear and clear (Unfinished).
